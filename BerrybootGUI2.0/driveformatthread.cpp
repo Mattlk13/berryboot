@@ -154,6 +154,10 @@ void DriveFormatThread::run()
             sync();
         }
     }
+    else
+    {
+        QProcess::execute("/sbin/fatlabel /dev/"+_bootdev+" boot");
+    }
 
     if (_fs != "existing")
     {
@@ -261,6 +265,7 @@ void DriveFormatThread::run()
 
         /* Finished */
         emit statusUpdate(tr("Unmounting boot partition"));
+        _i->cleanupDrivers();
         _i->umountSystemPartition();
 
         emit statusUpdate(tr("Finish writing to disk (sync)"));
